@@ -21,8 +21,8 @@ bot = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=discord
 async def on_ready():
     print(f"\nConnected to {bot.user}\n")
     await load_extensions()    
-    custom_status = discord.Activity(type=discord.ActivityType.custom, name="flames everywhere, i see satan")
-    await bot.change_presence(activity=custom_status)
+    status = discord.CustomActivity(name = "chillin' in my head, but it's hot... flames everywhere, i see satan")
+    await bot.change_presence(activity=status)
 
 async def load_extensions():
     for filename in os.listdir('./commands'):
