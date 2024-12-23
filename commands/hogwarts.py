@@ -8,7 +8,9 @@ class HarryPotter(commands.Cog):
             "I solemnly swear that I'm up to no good",
             "I solemnly swear that I am up to no good",
             "I solemnly swear that I'm upto no good",
-            "I solemnly swear that I am upto no good"
+            "I solemnly swear that I am upto no good",
+            "I solemnly swear that Im up to no good"            
+            "I solemnly swear that Im upto no good"
         ]
         self.remove_role_trigger = "mischief managed"
         self.role_id = 1320302009295048734 
