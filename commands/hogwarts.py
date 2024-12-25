@@ -13,7 +13,7 @@ class HarryPotter(commands.Cog):
             "I solemnly swear that Im upto no good"
         ]
         self.remove_role_trigger = "mischief managed"
-        self.role_id = 1155497245240729730 # 1320302009295048734 
+        self.role_id = 1320302009295048734 
 
     @commands.Cog.listener()
     async def on_message(self, message):        
