@@ -40,14 +40,29 @@ class Terminal(commands.Cog):
                 return
             
             try:
-                result = subprocess.run(
+                process = subprocess.Popen(
                     message.content,
                     shell=True,
-                    capture_output=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    stdin=subprocess.PIPE,
                     text=True
                 )
 
-                output = result.stdout or result.stderr or "Command executed, but no output."
+                output = ""
+                while True:
+                    stdout = process.stdout.readline()
+                    stderr = process.stderr.readline()
+
+                    if stdout:
+                        output += stdout
+                    if stderr:
+                        output += stderr
+
+                    if stdout == "" and stderr == "" and process.poll() is not None:
+                        break
+
+                    await asyncio.sleep(1)
 
                 chunks = textwrap.wrap(output, width=2000)
 
@@ -62,10 +77,11 @@ class Terminal(commands.Cog):
             except Exception as e:
                 embed = discord.Embed(
                     title="Error",
-                    description=e,
+                    description=f"An error occurred while executing the command: `{e}`",
                     color=discord.Color.red()
                 )
                 await message.channel.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Terminal(bot))
+```0
