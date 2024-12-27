@@ -77,11 +77,10 @@ class Terminal(commands.Cog):
             except Exception as e:
                 embed = discord.Embed(
                     title="Error",
-                    description=f"An error occurred while executing the command: `{e}`",
+                    description=e,
                     color=discord.Color.red()
                 )
                 await message.channel.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Terminal(bot))
-```0
