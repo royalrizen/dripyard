@@ -3,6 +3,7 @@ from discord.ext import commands
 import subprocess
 import textwrap
 from utils.staff import is_dev
+import asyncio
 
 class Terminal(commands.Cog):
     def __init__(self, bot):
