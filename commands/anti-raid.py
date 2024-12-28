@@ -7,7 +7,7 @@ class AntiRaid(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="mass-ban", aliases=['mb'], usage="<message>", description="Mass bans all the users who sent a specific message")
+    @commands.command(name="massban", aliases=['mb'], usage="<message>", description="Mass bans all the users who sent a specific message")
     @commands.check(is_staff)
     async def mass_ban(self, ctx, *, target_message: str):
         """Bans users who sent a certain message."""
