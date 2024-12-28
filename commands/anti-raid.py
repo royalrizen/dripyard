@@ -58,7 +58,8 @@ class AntiRaid(commands.Cog):
         banned_count = 0
         for user_id, _ in matching_users:
             try:
-                await ctx.guild.ban(discord.Object(id=user_id), reason="Mass ban command used")
+                #await ctx.guild.ban(discord.Object(id=user_id), reason="Mass ban command used")
+                await ctx.send("okay")
                 banned_count += 1
             except discord.Forbidden:
                 await ctx.send(f"Failed to ban user with ID {user_id} (missing permissions).")
