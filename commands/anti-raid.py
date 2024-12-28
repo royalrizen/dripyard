@@ -8,6 +8,7 @@ class AntiRaid(commands.Cog):
         self.bot = bot
 
     @commands.command(name="massban", aliases=['mb'], usage="<message>", description="Mass bans all the users who sent a specific message")
+    @commands.check(is_staff)
     async def mass_ban(self, ctx, *, target_message: str):
         """Bans users who sent a certain message."""
         if not ctx.guild:
@@ -24,7 +25,7 @@ class AntiRaid(commands.Cog):
             await ctx.send("No users found who sent that message.")
             return
 
-       await m.delete()
+        await m.delete()
 
         embed = discord.Embed(
             title="Mass Ban Confirmation",
