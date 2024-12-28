@@ -50,7 +50,7 @@ class AntiRaid(commands.Cog):
             await ctx.send("Confirmation timed out. No action taken.")
             return
 
-        if str(reaction.emoji) == "❌":
+        if str(reaction.emoji) == config.ERROR:
             await ctx.send("Mass ban canceled.")
             return
 
