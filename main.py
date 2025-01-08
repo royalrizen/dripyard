@@ -34,7 +34,7 @@ async def load_extensions():
             except commands.ExtensionError as e:
                 print(f"[-] {filename[:-3]} — offline ({e})")
     nodes = [
-        wavelink.Node(uri=WAVELINK_URI, password=WAVELINK_PASS)
+        wavelink.Node(uri=config.WAVELINK_URL, password=config.WAVELINK_PASS)
     ]
     await wavelink.Pool.connect(client=bot, nodes=nodes)
 
