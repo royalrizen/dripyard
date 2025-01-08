@@ -38,14 +38,6 @@ async def load_extensions():
     ]
     await wavelink.Pool.connect(client=bot, nodes=nodes)
 
-    await wavelink.NodePool.create_node(
-        bot=bot,
-        host="lavalink.alfari.id",
-        port=443,
-        password="catfein",
-        https=True
-    )
-
 class ReportButton(View):
     def __init__(self, bot, error_message, guild_id, user_id, username, command_name, original_message):
         super().__init__(timeout=None)
