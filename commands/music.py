@@ -2,7 +2,6 @@ from typing import Optional, cast
 import discord
 from discord.ext import commands
 import wavelink
-import config
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
