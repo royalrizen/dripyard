@@ -1,4 +1,5 @@
-discord.py
+discord.py[voice]
 requests
 pyyaml
 flask
+wavelink
