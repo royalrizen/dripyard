@@ -80,7 +80,7 @@ async def on_command_error(ctx, error):
         
         view.original_message = error_msg
     else:
-     	await ctx.reply(error, allowed_mentions=discord.AllowedMentions.none())
+     	  await ctx.reply(error, allowed_mentions=discord.AllowedMentions.none())
      	       
 async def evaluate(ctx, code):
     try:
