@@ -44,7 +44,7 @@ class Music(commands.Cog):
             await player.queue.put_wait(track)
             await ctx.send(f"Added **`{track.title}`** to the queue.")
 
-        if not player.is_playing():
+        if not player.playing:
             await player.play(player.queue.get(), volume=30)
 
     @commands.command()
