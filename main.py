@@ -9,6 +9,7 @@ import os
 import yaml 
 import web 
 from utils.staff import is_dev
+import wavelink
 
 with open('settings.yaml', 'r') as file:
   settings = yaml.safe_load(file)        
@@ -32,6 +33,10 @@ async def load_extensions():
                 print(f"[+] {filename[:-3]}.py — online")
             except commands.ExtensionError as e:
                 print(f"[-] {filename[:-3]} — offline ({e})")
+    nodes = [
+        wavelink.Node(uri=WAVELINK_URI, password=WAVELINK_PASS)
+    ]
+    await wavelink.Pool.connect(client=bot, nodes=nodes)
 
 class ReportButton(View):
     def __init__(self, bot, error_message, guild_id, user_id, username, command_name, original_message):
