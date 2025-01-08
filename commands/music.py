@@ -1,7 +1,7 @@
-from typing import Optional, cast
 import discord
 from discord.ext import commands
 import wavelink
+from typing import Optional, cast
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -9,7 +9,6 @@ class Music(commands.Cog):
 
     @commands.command()
     async def play(self, ctx: commands.Context, *, query: str):
-        """Play a song with the given query."""
         if not ctx.guild:
             return
 
@@ -17,7 +16,7 @@ class Music(commands.Cog):
 
         if not player:
             try:
-                player = await ctx.author.voice.channel.connect(cls=wavelink.Player)  # type: ignore
+                player = await ctx.author.voice.channel.connect(cls=wavelink.Player) 
             except AttributeError:
                 await ctx.send("Please join a voice channel first before using this command.")
                 return
@@ -27,7 +26,6 @@ class Music(commands.Cog):
 
         player.autoplay = wavelink.AutoPlayMode.enabled
 
-        # Lock the player to the current text channel
         if not hasattr(player, "home"):
             player.home = ctx.channel
         elif player.home != ctx.channel:
@@ -52,7 +50,6 @@ class Music(commands.Cog):
 
     @commands.command()
     async def skip(self, ctx: commands.Context):
-        """Skip the current song."""
         player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
         if not player:
             return
@@ -62,7 +59,6 @@ class Music(commands.Cog):
 
     @commands.command()
     async def nightcore(self, ctx: commands.Context):
-        """Set the filter to a nightcore style."""
         player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
         if not player:
             return
@@ -74,7 +70,6 @@ class Music(commands.Cog):
 
     @commands.command(name="toggle", aliases=["pause", "resume"])
     async def pause_resume(self, ctx: commands.Context):
-        """Pause or resume the player."""
         player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
         if not player:
             return
@@ -84,7 +79,6 @@ class Music(commands.Cog):
 
     @commands.command()
     async def volume(self, ctx: commands.Context, value: int):
-        """Change the volume of the player."""
         player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
         if not player:
             return
@@ -94,7 +88,6 @@ class Music(commands.Cog):
 
     @commands.command(aliases=["dc"])
     async def disconnect(self, ctx: commands.Context):
-        """Disconnect the player."""
         player: wavelink.Player = cast(wavelink.Player, ctx.voice_client)
         if not player:
             return
