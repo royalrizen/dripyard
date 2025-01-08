@@ -32,6 +32,9 @@ class Music(commands.Cog):
             await ctx.send(f"You can only play songs in {player.home.mention}.")
             return
 
+        if not query.startswith("scsearch:"):
+            query = f"scsearch:{query}"
+
         tracks = await wavelink.Playable.search(query)
         if not tracks:
             await ctx.send(f"Could not find any tracks for `{query}`.")
