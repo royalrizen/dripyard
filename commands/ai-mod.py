@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import re
 from gemini import Gemini
-from staff import is_staff
+from utils.staff import is_staff
 import config
 
 AI_PROMPT = """
