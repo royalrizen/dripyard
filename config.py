@@ -4,6 +4,7 @@ import os
 TOKEN = os.environ['TOKEN']
 WAVELINK_URL = os.environ['WAVELINK_URL']
 WAVELINK_PASS = os.environ['WAVELINK_PASS']
+COOKIE = os.environ['COOKIE']
 
 # COLORS
 PRIMARY_COLOR = 0xffb9f0 # pink 
