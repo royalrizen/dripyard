@@ -3,3 +3,4 @@ requests
 pyyaml
 flask
 wavelink
+python-gemini-api
