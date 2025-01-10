@@ -6,7 +6,7 @@ from utils.staff import is_staff
 import config
 
 AI_PROMPT = """
-You will be provided moderation action details, and your task is to process them accordingly. First, check if the action is a valid moderation action: `namechange`, `ban`, `kick`, or `timeout`. If the action is not valid, return an error. If the rulebreaker is also a staff member, no action should be taken, and return a message indicating that. If the action is a `timeout`, ensure the timeout duration is provided in `d/h/m` format (e.g., `1d`, `2h`, `30m`). If the timeout duration is invalid or missing, use a default of `1m`. Finally, return a strict JSON response with the following fields: `status` (success, error, or failed), `message` (any additional details or error messages), `action` (the moderation action performed, such as `ban`, `kick`, `timeout`, or `namechange`), and `timeout` (the duration for timeout actions in `d/h/m` if applicable). Ensure all details are properly validated before proceeding with the action.
+You will be provided moderation action details, and your task is to process them accordingly. First, check if the action is a valid moderation action: `namechange`, `ban`, `kick`, or `timeout`. If the action is not valid, return an error. If the rulebreaker is also a staff member, no action should be taken, and return a message indicating that. If the action is a `timeout`, ensure the timeout duration is provided in `d/h/m` format (e.g., `1d`, `2h`, `30m`). If the timeout duration is invalid or missing, use a default of `1m`. If the action is `namechange`, ensure the new name is valid and provided in the AI response. Finally, return a strict JSON response with the following fields: `status` (success, error, or failed), `message` (any additional details or error messages), `action` (the moderation action performed, such as `ban`, `kick`, `timeout`, or `namechange`), and `timeout` (the duration for timeout actions in `d/h/m` if applicable). Ensure all details are properly validated before proceeding with the action.
 """
 
 class AIMod(commands.Cog):
@@ -19,12 +19,12 @@ class AIMod(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        if is_staff(message):  # Check if the message author is a staff member
+        if is_staff(message):
             if message.reference and message.reference.message_id:
                 match = re.search(r"<@!?(\d+)>", message.content)
                 if match:
                     user_id = int(match.group(1))
-                    if is_staff(user_id):  # Check if the rulebreaker is also staff
+                    if is_staff(user_id):
                         await message.channel.send(f"{config.ERROR} Can't do it. The user is a staff member.")
                         return
 
@@ -32,7 +32,7 @@ class AIMod(commands.Cog):
                     if action:
                         timeout_duration = self.extract_timeout_duration(message.content) if action == "timeout" else None
                         ai_response = self.call_moderation_ai(action, message.author.id, user_id, timeout_duration)
-                        
+
                         if ai_response['status'] == 'success':
                             await message.channel.send(
                                 f"👌 **`{action}`** on user **{user_id}** was successful.\n-# {ai_response}"
@@ -59,7 +59,7 @@ class AIMod(commands.Cog):
         match = re.search(r"(\d+[dhm])", message_content)
         if match:
             return match.group(1)
-        return "1m"  # Default timeout duration
+        return "1m"
 
     def call_moderation_ai(self, action, mod_id, user_id, timeout=None):
         moderation_details = {
@@ -68,10 +68,15 @@ class AIMod(commands.Cog):
             "user_id": user_id,
             "timeout": timeout
         }
+        cookies = {"__Secure-1PSID": self.gemini_key}
         prompt_with_details = f"{AI_PROMPT}\n\nModeration Details - {moderation_details}"
-        client = Gemini(cookies=self.gemini_key)
-        response = client.generate_content(prompt_with_details)  # Ensure this method is correct
-        return response
+
+        try:
+            client = Gemini(cookies=cookies)
+            response = client.generate_content(prompt_with_details)
+            return response
+        except Exception as e:
+            return {"status": "error", "message": str(e), "action": action, "timeout": timeout}
 
     async def ban_user(self, message, user_id, ai_response):
         member = message.guild.get_member(user_id)
@@ -101,13 +106,14 @@ class AIMod(commands.Cog):
         member = message.guild.get_member(user_id)
         if member:
             new_name = ai_response.get('message', None)
-            if new_name:
+            if new_name and len(new_name) <= 32:  # Discord nickname limit
                 try:
                     await member.edit(nick=new_name)
+                    await message.channel.send(f"👌 Nickname changed to **{new_name}** for user **{user_id}**.")
                 except discord.errors.Forbidden:
                     await message.channel.send(f"{config.ERROR} Bot lacks permission to change the nickname.")
             else:
-                await message.channel.send(f"{config.ERROR} No valid name change suggestion provided.\n-# {ai_response}")
+                await message.channel.send(f"{config.ERROR} No valid or too long name suggestion provided.\n-# {ai_response}")
         else:
             await message.channel.send(f"{config.ERROR} User not found in the server.\n-# {ai_response}")
 
