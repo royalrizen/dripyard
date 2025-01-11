@@ -4,6 +4,7 @@ import subprocess
 import textwrap
 from utils.staff import is_dev
 import asyncio
+from urllib.parse import unquote
 
 class Terminal(commands.Cog):
     def __init__(self, bot):
@@ -41,8 +42,10 @@ class Terminal(commands.Cog):
                 return
             
             try:
+                command = unquote(message.content)
+                
                 process = subprocess.Popen(
-                    message.content,
+                    command,
                     shell=True,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
@@ -78,7 +81,7 @@ class Terminal(commands.Cog):
             except Exception as e:
                 embed = discord.Embed(
                     title="Error",
-                    description=e,
+                    description=str(e),
                     color=discord.Color.red()
                 )
                 await message.channel.send(embed=embed)
