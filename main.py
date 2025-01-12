@@ -15,16 +15,15 @@ with open('settings.yaml', 'r') as file:
   settings = yaml.safe_load(file)        
   prefix  = settings['prefix']
   bug_reports_channel = settings['log_channels']['bug_reports']
-        
-bot = commands.Bot(command_prefix=prefix, case_insensitive=True, intents=discord.Intents.all())
+
+custom_status = discord.CustomActivity(name = "to die by your side is such a heavenly way to die")
+bot = commands.Bot(command_prefix=prefix, activity=custom_status, case_insensitive=True, intents=discord.Intents.all())
 
 @bot.event
 async def on_ready():
     print(f"\nConnected to {bot.user}\n")
     await load_extensions()    
-    status = discord.CustomActivity(name = "chillin' in my head, but it's hot... flames everywhere, i see satan")
-    await bot.change_presence(activity=status)
-
+    
 async def load_extensions():
     for filename in os.listdir('./commands'):
         if filename.endswith('.py'):
